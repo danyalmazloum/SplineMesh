@@ -17,7 +17,7 @@ namespace SplineMesh {
 
         private bool useSpline = false;
         private CubicBezierCurve curve;
-        private Spline spline;
+        public Spline spline;
         private float intervalStart, intervalEnd;
 
         private List<Vertex> shapeVertices = new List<Vertex>();

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 #if UNITY_EDITOR
-using UnityEditor.Experimental.SceneManagement;
+
 #endif
 
 namespace SplineMesh {
@@ -78,7 +78,7 @@ namespace SplineMesh {
         public void CreateMeshes() {
 #if UNITY_EDITOR
             // we don't update if we are in prefab mode
-            if (PrefabStageUtility.GetCurrentPrefabStage() != null) return;
+            if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null) return;
 #endif
             var used = new List<GameObject>();
 
@@ -100,7 +100,7 @@ namespace SplineMesh {
             // we destroy the unused objects. This is classic pooling to recycle game objects.
             foreach (var go in generated.transform
                 .Cast<Transform>()
-                .Select(child => child.gameObject).Except(used).ToList()) {
+                .Select(child => child.gameObject).Except(used)) {
                 UOUtility.Destroy(go);
             }
         }

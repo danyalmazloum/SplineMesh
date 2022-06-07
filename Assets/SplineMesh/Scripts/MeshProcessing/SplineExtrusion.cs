@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DanyalExtensions.UnityExtensions.TagSelector;
 using UnityEngine;
 
 namespace SplineMesh {
@@ -23,7 +24,7 @@ namespace SplineMesh {
     /// </summary>
     [ExecuteInEditMode]
     [RequireComponent(typeof(Spline))]
-    public class SplineExtrusion : MonoBehaviour {
+    public class SplineExtrusion : MonoBehaviour {  
         private Spline spline;
         private bool toUpdate = true;
         private GameObject generated;
@@ -32,6 +33,10 @@ namespace SplineMesh {
         public Material material;
         public float textureScale = 1;
         public float sampleSpacing = 0.1f;
+        public bool isTrigger = false;
+        [TagSelector]
+        public string tagName = "Untagged";
+
 
         /// <summary>
         /// Clear shape vertices, then create three vertices with three normals for the extrusion to be visible
@@ -43,6 +48,19 @@ namespace SplineMesh {
             shapeVertices.Add(new ExtrusionSegment.Vertex(new Vector2(-1, -0.5f), new Vector2(-1, -1), 0.66f));
             toUpdate = true;
             OnEnable();
+        }
+        
+        //Add By Me
+        public float GetExtrutionWidth()
+        {
+            var list = new List<float>();
+            for (int i = 0; i < shapeVertices.Count; i++)
+            {
+                list.Add(shapeVertices[i].point.x);
+            }
+            var min = list.Min(x => x);
+            var max = list.Max(x => x);
+            return Mathf.Abs(max - min) / 2f;
         }
 
         private void OnValidate() {
@@ -78,12 +96,20 @@ namespace SplineMesh {
                     typeof(ExtrusionSegment),
                     typeof(MeshCollider));
                 go.GetComponent<MeshRenderer>().material = material;
+                if (isTrigger)
+                {
+                    go.GetComponent<MeshCollider>().convex = true;
+                    go.GetComponent<MeshCollider>().isTrigger = isTrigger;
+                }
+                go.tag = tagName;
                 ExtrusionSegment seg = go.GetComponent<ExtrusionSegment>();
                 seg.ShapeVertices = shapeVertices;
                 seg.TextureScale = textureScale;
                 seg.TextureOffset = textureOffset;
                 seg.SampleSpacing = sampleSpacing;
                 seg.SetInterval(curve);
+                seg.spline = spline;
+
 
                 textureOffset += curve.Length;
             }

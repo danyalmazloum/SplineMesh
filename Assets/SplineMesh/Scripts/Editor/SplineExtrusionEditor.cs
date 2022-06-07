@@ -12,6 +12,8 @@ namespace SplineMesh {
         private SerializedProperty sampleSpacing;
         private SerializedProperty material;
         private SerializedProperty vertices;
+        private SerializedProperty tagName;
+        private SerializedProperty isTrigger;
 
         private SplineExtrusion se;
         private ExtrusionSegment.Vertex selection = null;
@@ -22,6 +24,8 @@ namespace SplineMesh {
             sampleSpacing = serializedObject.FindProperty("sampleSpacing");
             material = serializedObject.FindProperty("material");
             vertices = serializedObject.FindProperty("shapeVertices");
+            tagName = serializedObject.FindProperty("tagName");
+            isTrigger = serializedObject.FindProperty("isTrigger");
         }
 
         void OnSceneGUI() {
@@ -29,7 +33,7 @@ namespace SplineMesh {
             if (e.type == EventType.MouseDown) {
                 Undo.RegisterCompleteObjectUndo(se, "change extruded shape");
                 // if control key pressed, we will have to create a new vertex if position is changed
-                if (e.alt) {
+                if (e.control) {
                     mustCreateNewNode = true;
                 }
             }
@@ -147,6 +151,8 @@ namespace SplineMesh {
             EditorGUILayout.PropertyField(textureScale, true);
             EditorGUILayout.PropertyField(sampleSpacing, true);
             EditorGUILayout.PropertyField(material, true);
+            EditorGUILayout.PropertyField(tagName, true);
+            EditorGUILayout.PropertyField(isTrigger, true);
 
             EditorGUILayout.PropertyField(vertices);
             EditorGUI.indentLevel += 1;

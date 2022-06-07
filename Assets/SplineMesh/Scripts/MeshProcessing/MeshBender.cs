@@ -323,7 +323,5 @@ namespace SplineMesh {
                 collider.sharedMesh = result;
             }
         }
-
-
     }
 }
