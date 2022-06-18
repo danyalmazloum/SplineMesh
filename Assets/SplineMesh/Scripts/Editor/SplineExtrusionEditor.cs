@@ -14,6 +14,8 @@ namespace SplineMesh {
         private SerializedProperty vertices;
         private SerializedProperty tagName;
         private SerializedProperty isTrigger;
+        private SerializedProperty spline;
+        private SerializedProperty isCanvext;
 
         private SplineExtrusion se;
         private ExtrusionSegment.Vertex selection = null;
@@ -26,6 +28,8 @@ namespace SplineMesh {
             vertices = serializedObject.FindProperty("shapeVertices");
             tagName = serializedObject.FindProperty("tagName");
             isTrigger = serializedObject.FindProperty("isTrigger");
+            spline = serializedObject.FindProperty("spline");
+            isCanvext = serializedObject.FindProperty("isCanvext");
         }
 
         void OnSceneGUI() {
@@ -40,7 +44,7 @@ namespace SplineMesh {
             if (e.type == EventType.MouseUp) {
                 mustCreateNewNode = false;
             }
-            var spline = se.GetComponent<Spline>();
+            var spline = se.spline;
 
             CurveSample startSample = spline.GetSample(0);
             Quaternion q = startSample.Rotation;
@@ -148,11 +152,13 @@ namespace SplineMesh {
             GUI.enabled = true;
 
             // Properties
+            EditorGUILayout.PropertyField(spline, true); 
             EditorGUILayout.PropertyField(textureScale, true);
             EditorGUILayout.PropertyField(sampleSpacing, true);
             EditorGUILayout.PropertyField(material, true);
             EditorGUILayout.PropertyField(tagName, true);
             EditorGUILayout.PropertyField(isTrigger, true);
+            EditorGUILayout.PropertyField(isCanvext, true);
 
             EditorGUILayout.PropertyField(vertices);
             EditorGUI.indentLevel += 1;
